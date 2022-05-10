@@ -52,6 +52,9 @@ class KittiSegtrackDetectionDataset(MapillaryLikeDetectionFileListDataset):
     seq_ids = self.seq_ids_train if self.subset == "train" else self.seq_ids_val
     anns = []
     for seq_id in seq_ids:
+      #if seq_id % 2 == 0:
+      #if seq_id % 5 == 0:  
+      #  continue
       anns += sorted(glob.glob(self.data_dir + "/instances/" + seq_id + "/*.png"))
 
     imgs = [x.replace("/instances/", "/images/") for x in anns]
@@ -74,6 +77,9 @@ class KittiSegtrackDataset(KittiSegtrackDetectionDataset):
     seq_ids = self.seq_ids_train if self.subset == "train" else self.seq_ids_val
     anns = []
     for seq_id in seq_ids:
+      #if seq_id % 2 == 0:
+      #if seq_id % 5 == 0: 
+      #  continue
       anns_vid = sorted(glob.glob(self.data_dir + "/instances/" + seq_id + "/*.png"))
       starting_points = anns_vid[:-(self._batch_size - 1)]
       anns += starting_points

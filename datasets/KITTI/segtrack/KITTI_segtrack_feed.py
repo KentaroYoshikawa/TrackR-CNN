@@ -1,4 +1,5 @@
 import glob
+import os
 import numpy as np
 from PIL import Image
 from multiprocessing import Pool
@@ -97,8 +98,19 @@ class KittiSegtrackFeedDataset(KittiSegtrackLikeFeedDataset):
     super().__init__(config, subset, "KITTI_segtrack", DEFAULT_PATH, SEQ_IDS_TRAIN, SEQ_IDS_VAL, False)
 
   def get_filenames_for_video_idx(self, idx):
-    return sorted(glob.glob(self.data_dir + "/images/" + self._video_tags[idx] + "/*.png"))
-
+    #return sorted(glob.glob(self.data_dir + "/images/" + self._video_tags[idx] + "/*.png"))
+    dirname = os.path.join(self.data_dir, "images", self._video_tags[idx])
+    filelist = os.listdir(dirname)
+    new_filelist = []
+    for filename in filelist:
+      base, ext = os.path.splitext(filename)
+      #if int(base) % 2 != 0:
+      #if int(base) % 5 != 0:
+      #if int(base) % 10 != 0:  
+      #  continue
+      new_filelist.append(os.path.join(dirname, str(base)+ext))
+    return new_filelist
+    print(new_filelist)
 
 def _load_img(filename):
   return np.array(Image.open(filename), dtype="float32") / 255
