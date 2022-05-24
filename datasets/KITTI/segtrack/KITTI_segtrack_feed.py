@@ -96,6 +96,7 @@ class KittiSegtrackLikeFeedDataset(FeedDataset):
 class KittiSegtrackFeedDataset(KittiSegtrackLikeFeedDataset):
   def __init__(self, config, subset):
     super().__init__(config, subset, "KITTI_segtrack", DEFAULT_PATH, SEQ_IDS_TRAIN, SEQ_IDS_VAL, False)
+    self.fps = self.config.int("fps")
 
   def get_filenames_for_video_idx(self, idx):
     #return sorted(glob.glob(self.data_dir + "/images/" + self._video_tags[idx] + "/*.png"))
@@ -104,13 +105,11 @@ class KittiSegtrackFeedDataset(KittiSegtrackLikeFeedDataset):
     new_filelist = []
     for filename in filelist:
       base, ext = os.path.splitext(filename)
-      #if int(base) % 2 != 0:
-      #if int(base) % 5 != 0:
-      #if int(base) % 10 != 0:  
-      #  continue
+      if int(base) % (10 // self.fps):
+        continue
       new_filelist.append(os.path.join(dirname, str(base)+ext))
+    new_filelist = sorted(new_filelist)
     return new_filelist
-    print(new_filelist)
 
 def _load_img(filename):
   return np.array(Image.open(filename), dtype="float32") / 255

@@ -20,8 +20,9 @@ from datasets.util.Util import username
 
 
 class TrackingForwarder(RecurrentDetectionForwarder):
-  def __init__(self, engine):
+  def __init__(self, engine, config=None):
     super().__init__(engine, extraction_keys=DETECTION_EXTRACTION_KEYS + (Extractions.REID_FEATURES,))
+    self.config = config
     self.add_masks = self.config.bool("add_masks", True)
     self.export_embeddings = self.config.bool("export_embeddings", False)
 
@@ -205,7 +206,7 @@ class TrackingForwarder(RecurrentDetectionForwarder):
     if self.export_detections:
       print("Exporting detections", file=log.v5)
       export_detections_for_sequence(tag, det_boxes, det_scores, reid_features, det_classes, det_masks,
-                                     self.config.string("model"), self.engine.start_epoch, self.add_masks)
+                                     self.config.string("model"), self.engine.start_epoch, self.add_masks, fps=self.config.int("fps"))
     if self.export_embeddings:
       print("Exporting embeddings", file=log.v5)
       # Save to export to tensorboard checkpoint

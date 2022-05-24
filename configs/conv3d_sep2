@@ -53,5 +53,6 @@
     "frcnn": {"class": "FasterRCNN", "fastrcnn_batch_per_img": 64, "reid_dimension": 128, "reid_loss_per_class": true,
               "reid_loss_factor": 1.0, "reid_loss_variant": 1, "reid_measure": "euclidean", "from": ["conv3d_2"],
               "class_agnostic_box_and_mask_heads": true}
-  }
+  },
+  "fps": 5
 }

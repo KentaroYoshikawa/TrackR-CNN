@@ -60,7 +60,7 @@ def export_tracking_result_in_kitti_format(tag, tracks, add_masks, model_str, ou
           print(t, track.track_id, class_str, -1, -1, -1, *track.box, -1, -1, -1, -1, -1, -1, -1, track.score, file=f)
 
 
-def export_detections_for_sequence(tag, boxes, scores, reids, classes, masks, model_str, epoch, add_masks, out_folder=""):
+def export_detections_for_sequence(tag, boxes, scores, reids, classes, masks, model_str, epoch, add_masks, out_folder="", fps=10):
   if out_folder == "":
     out_folder = "forwarded/" + model_str + "/detections/" + str(epoch)
   os.makedirs(out_folder, exist_ok=True)
@@ -70,10 +70,12 @@ def export_detections_for_sequence(tag, boxes, scores, reids, classes, masks, mo
     for boxes_t, scores_t, reids_t, classes_t, masks_t in zip(boxes, scores, reids, classes, masks):
       for box, score, reid, class_, mask in zip(boxes_t, scores_t, reids_t, classes_t, masks_t):
         if add_masks:
-          print(t, *box, score, class_, *mask['size'], mask['counts'].decode(encoding='UTF-8'), *reid, file=f)
+          # print(t, *box, score, class_, *mask['size'], mask['counts'].decode(encoding='UTF-8'), *reid, file=f)
+          print(t, *box, score, class_, *mask['size'], *reid, file=f)
         else:
           print(t, *box, score, class_, *reid, file=f)
-      t = t + 1
+      # t = t + 1
+      t = t + (10 // fps)
 
 
 def import_detections_for_sequence(tag, max_len_seq, detections_import_path, model_str, epoch, add_masks,

@@ -86,7 +86,7 @@ class Engine:
     elif self.task == "forward_detections_recurrent":
       RecurrentDetectionForwarder(self).forward()
     elif self.task == "forward_tracking":
-      TrackingForwarder(self).forward()
+      TrackingForwarder(self, config=self.config).forward()
     elif self.task == "forward_refine_bboxes":
       BboxRefinementForwarder(self).forward()
     elif self.task == "forward_refine_detection_bboxes":
